@@ -14,11 +14,12 @@ import javafx.stage.Stage;
 
 public class Animation extends Application {
 	int canvasSize = 512;				// constants for relevant sizes
-	double earthOrbitSize = canvasSize / 3;
-	double marsOrbitSize = canvasSize/1.5;//ADDED
-	double sunSize = 80;
-	double earthSize = 30;
-	double marsSize = 15;//ADDED
+	double earthOrbitSize = canvasSize /6;
+	double marsOrbitSize = canvasSize/3;//ADDED
+	double sunSize = 30;
+	double earthSize = 20;
+	double marsSize = 10;//ADDED
+	int skip = 0;
     GraphicsContext gc; 
     Image earth = new Image(getClass().getResourceAsStream("earth.png"));
     Image sun = new Image(getClass().getResourceAsStream("sun.png"));
@@ -42,13 +43,13 @@ public class Animation extends Application {
 	private void drawSystem (double t) {
 		double x = canvasSize/2 + earthOrbitSize * Math.cos(t);	// calculate coordinates of earth
 		double y = canvasSize/2 + earthOrbitSize * Math.sin(t);
-		double mx= canvasSize/2 + marsOrbitSize * Math.cos(t);
-		double my= canvasSize/2 + marsOrbitSize * Math.sin(t);
+		double mx= canvasSize/2 + marsOrbitSize * Math.cos(t*0.5);
+		double my= canvasSize/2 + marsOrbitSize * Math.sin(t*0.5);
 			
 			// now clear canvas and draw earth and sun
 		gc.clearRect(0,  0,  canvasSize,  canvasSize);
 		drawIt( earth, x, y, earthSize );
-		drawIt( mars, mx, my, marsSize );//Test using earth calcs 
+		drawIt( mars, mx, my, marsSize );//Test
 		drawIt( sun, canvasSize/2, canvasSize/2, sunSize );
 
 	}
