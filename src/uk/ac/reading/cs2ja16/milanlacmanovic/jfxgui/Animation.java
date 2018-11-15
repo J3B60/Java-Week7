@@ -19,7 +19,6 @@ public class Animation extends Application {
 	double sunSize = 30;
 	double earthSize = 20;
 	double marsSize = 10;//ADDED
-	int skip = 0;
     GraphicsContext gc; 
     Image earth = new Image(getClass().getResourceAsStream("earth.png"));
     Image sun = new Image(getClass().getResourceAsStream("sun.png"));
