@@ -24,7 +24,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 
 public class AnimationWBPane extends Application {
@@ -49,6 +51,7 @@ public class AnimationWBPane extends Application {
     Image mars = new Image(getClass().getResourceAsStream("mars.png"));
     double sunPosx = canvasSize/2;
     double sunPosy = canvasSize/2;
+    long startNanoTime = System.nanoTime();
     /**
      * drawIt ... draws object defined by given image at position and size
      * @param i
@@ -78,7 +81,7 @@ public class AnimationWBPane extends Application {
 	 * function to show in a box ABout the programme
 	 */
 	 private void showHelp() {
-		 showMessage("Help", "Solar System with Mars and Earth");
+		 showMessage("Help", "Start to start animation, Pause to pause animation");
 	 }
  
 	
@@ -170,7 +173,14 @@ public class AnimationWBPane extends Application {
 		btnBottom.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				SetAnimationRun = true;
+				if(SetAnimationRun == true) {
+					startNanoTime = System.nanoTime();
+					SetAnimationRun = true;
+				}
+				else {
+					SetAnimationRun = true;
+				}
+				setBottomButtons();
 					// and its action to draw earth at random angle
 			}
 		});
@@ -179,19 +189,35 @@ public class AnimationWBPane extends Application {
 	
 	private Button setPauseButton() {
 		// create button
-	Button btnBottom = new Button("Pause");
-			// now add handler
-	btnBottom.setOnAction(new EventHandler<ActionEvent>() {
-		@Override
-		public void handle(ActionEvent event) {
-			SetAnimationRun = false;
-				// and its action to draw earth at random angle
+		Button btnBottom = new Button("ERROR");
+		if(SetAnimationRun == true) {
+			btnBottom = new Button("Pause");
 		}
-	});
-	return btnBottom;
-	}
+		else {
+			btnBottom = new Button("Stop");
+		}
+			// now add handler
+		btnBottom.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (SetAnimationRun == false) {
+					startNanoTime = System.nanoTime();
+					SetAnimationRun = false;
+					drawSystem(t);
+				}
+				else {
+					SetAnimationRun = false;
+				}
+				setBottomButtons();
+					// and its action to draw earth at random angle
+			}
+		});
+		return btnBottom;
+		}
 	private void setBottomButtons(){
 		btPane.getChildren().clear();
+		btPane.getChildren().add(setStartButton());
+		btPane.getChildren().add(setPauseButton());
 		
 	}
 	/**
@@ -199,6 +225,7 @@ public class AnimationWBPane extends Application {
 	 */
 	@Override
 	public void start(Stage stagePrimary) throws Exception {
+		StackPane holder = new StackPane();
 		stagePrimary.setTitle("Solar System");
 		BorderPane bp = new BorderPane();
 		
@@ -208,7 +235,10 @@ public class AnimationWBPane extends Application {
 	    Group root = new Group();					// for group of what is shown			// put it in a scene				// apply the scene to the stage
 	    Canvas canvas = new Canvas( canvasSize, canvasSize );
 	    							// create canvas onto which animation shown
-	    root.getChildren().add( canvas );			// add to root and hence stage
+	    holder.getChildren().add(canvas);
+	    root.getChildren().add( holder );			// add to root and hence stage
+	   
+	    holder.setStyle("-fx-background-color: black");
 	    gc = canvas.getGraphicsContext2D();
 	    setMouseEvents(canvas);
 	    bp.setCenter(root);
@@ -220,11 +250,11 @@ public class AnimationWBPane extends Application {
 	    
 	    btPane = new HBox();
 	    bp.setBottom(btPane);
-	    
+	    setBottomButtons();
 	    Scene scene = new Scene(bp, canvasSize*1.4, canvasSize*1.2);
 	    stagePrimary.setScene( scene );
 	    stagePrimary.show();
-	    final long startNanoTime = System.nanoTime();
+//	    final long startNanoTime = System.nanoTime();
 		// for animation, note start time
 
 	    new AnimationTimer()			// create timer
