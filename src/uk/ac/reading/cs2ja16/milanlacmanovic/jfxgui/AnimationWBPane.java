@@ -4,8 +4,20 @@
 package uk.ac.reading.cs2ja16.milanlacmanovic.jfxgui;
 
 import java.util.Random;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -28,6 +40,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class AnimationWBPane extends Application {
 	int canvasSize = 512;				// constants for relevant sizes
@@ -270,8 +283,18 @@ public class AnimationWBPane extends Application {
 	    			}
 	    		}
 	    	}.start();					// start it
-	    
+	    	
 		stagePrimary.show();
+		
+		Timeline fiveSecondsWonder = new Timeline(new KeyFrame(Duration.seconds(5), new EventHandler<ActionEvent>() {
+
+		    @Override
+		    public void handle(ActionEvent event) {
+		        System.out.println("this is called every 5 seconds on UI thread");
+		    }
+		}));
+		fiveSecondsWonder.setCycleCount(Timeline.INDEFINITE);
+		fiveSecondsWonder.play();
 	}
 	
 	public static void main(String[] args) {
